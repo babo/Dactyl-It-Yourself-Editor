@@ -8,7 +8,7 @@ use <scad-utils/trajectory.scad>
 use <scad-utils/trajectory_path.scad>
 use <skin.scad>
 //################ Main Builder ############################
-module BuildTopPlate(keyhole = false, trackball = false, ThumbJoint = false, Border = false, PrettyBorder = false, ColoredSection = false)
+module BuildTopPlate(keyhole = false, trackball = false, ThumbJoint = false, Border = false, PrettyBorder = false, CustomBorder = true, ColoredSection = false)
 {
   //Submodules
   //TODO: change scope of submodules and remove duplicates now that calls are merged
@@ -57,7 +57,7 @@ module BuildTopPlate(keyhole = false, trackball = false, ThumbJoint = false, Bor
     union(){
       // Remove inter-columnar artifacts from borders and web joints
 //      for( cols = [C5, T0, T1]){
-        BindTopCuts(struct = TopCuts, height = 1);
+        BindTopCuts(Struct = TopCuts, height = 1);
 //      }
       // Keyholes
       if(keyhole == true){ //Column Section
@@ -88,7 +88,7 @@ module BuildTopPlate(keyhole = false, trackball = false, ThumbJoint = false, Bor
 //----- Supporting Modules for Main Builder Modules
 
 //----  functions
-function hadamard(a, b) = !(len(a) > 0) ? a*b : [ for (i = [0:len(a) - 1]) hadamard(a[i], b[i])]; // elementwise mult
+function hadamard(a, b) = is_list(a) ? [ for (i = [0:len(a) - 1]) hadamard(a[i], b[i])] : a*b; // elementwise mult
 function rowRange(col) = [RowInits[col]:RowEnds[col]]; // shorthand for row loop range
 
 //cal global y position without considering rotation for quick condition check
@@ -313,7 +313,8 @@ module BuildAdditionaltEdge(struct = Lborder, sides = LEFT, bBotScale = RScale){
           modBorderWid(true, 0, sides, 0, xLenM, BBackHeight, [0,0,0], row, struct[row][i], [bBotScale,1,1]);
         }
       }
-      if (len(search(struct[row][i],struct[row+1])) > 0){ // check if next row has matching column
+      s = search(struct[row][i],struct[row+1]);
+      if ((s != undef) && (len(s) > 0)){ // check if next row has matching column
         hull(){
           modBorderWid(true, 0, sides, 0, xLenM, BBackHeight, [0,FRONT,0], row, struct[row][i], [bBotScale,1,1]);
           modBorderWid(true, 0, sides, 0, xLenM, BBackHeight,  [0,BACK,0], row+1, struct[row][i], [bBotScale,1,1]);
@@ -654,7 +655,7 @@ module USBPort(Length = 1){
   }
 }
 
-module BuildBottomEnclosure(struct = Eborder, JackType = true, MCUType = true)
+module BuildBottomEnclosure(struct = Eborder, JackType = true, MCUType = true, Mount = false)
 {
   //submodule for calling the correct border modulation module and passing Parameters
   module modBorder(structID = 0, surfaceID = 0, subStructID = 0){
@@ -814,6 +815,7 @@ module BuildBottomPlate(struct = Eborder, aStruct = addCuts, hullList = Hstruct,
         }
       }
     }
+    if ((addCuts != undef) && (len(addCuts) > 0)) {
       for (i = [0:len(addCuts)-1]){
         translate([0,0,-.02])scale(1.02)hull(){
           for (j = [0:len(addCuts[i])-1]) {
@@ -823,6 +825,7 @@ module BuildBottomPlate(struct = Eborder, aStruct = addCuts, hullList = Hstruct,
           }
         }
       }
+    }
     for (i = [0:len(struct)-1]){  // cut wedge from enclosure
       translate([0,0,-.02])scale(1.001)hull(){
         for (j = [0:len(struct[i][0])-1]) {//itt through top surface list

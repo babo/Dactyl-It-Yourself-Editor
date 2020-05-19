@@ -6,7 +6,6 @@ Alps = 2;  // For Your Superiority Complex's Needs
 //Switch cutawy Type
 Cherry = 0;
 Box    = 1;
-Alps   = 2;
 
 //Cap type applys to MX only?
 //Cherry = 0;
@@ -18,7 +17,6 @@ MT3 = 3;
 plate_thickness = 1;
 plate_size = 15.6;
 edge_offset = 1;
-bottom_height = 5;
 bottom_size = plate_size - 2;
 
 top_height = 11.6;

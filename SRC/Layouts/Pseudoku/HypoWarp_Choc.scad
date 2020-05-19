@@ -46,7 +46,6 @@ Alps = 2;  // For Your Superiority Complex's Needs
 //Switch cutawy Type
 Cherry = 0;
 Box    = 1;
-Alps   = 2;
 
 //Cap type applys to MX only?
 //Cherry = 0;
@@ -473,6 +472,7 @@ Hstruct =
    [14,15,25,26,27]
  ];
 
+addCuts = [];
 
 //define Jointing between Thumb Cluster and Column
 

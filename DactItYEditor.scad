@@ -18,7 +18,6 @@ mirror([0,0,0]){ //[100] for Left side
   difference(){
     rotate(tenting)translate([0,0,plateHeight]){
       BuildTopPlate(
-        MockUp           = true,    // trun on switch and caps
         keyhole          = true,    // turn on keyhole cuts
         trackball        = true,   // turn on trackball mdoul
         ThumbJoint       = true,   // turn on thu+mb and column joint module
@@ -34,7 +33,7 @@ mirror([0,0,0]){ //[100] for Left side
   }
 //     translate(trackOrigin)rotate(trackTilt)Tra
   difference(){
-   BuildBottomEnclosure(struct = Eborder, Mount = true, JackType = true, MCUType = true);
+   BuildBottomEnclosure(struct = Eborder, JackType = true, MCUType = true);
    BuildBottomPlate(struct = Eborder, hullList = Hstruct, Mount = false, JackType = false, MCUType = false);
   }
 
